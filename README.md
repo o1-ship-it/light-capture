@@ -2,6 +2,8 @@
 
 A small Windows screenshot tool with a global hotkey and a configurable save folder.
 
+**源码可见，仅限非商业用途。** 本项目采用 [PolyForm Noncommercial License 1.0.0](LICENSE)。
+
 选好文件夹，按下快捷键，框选后自动保存。用 C# 和 Windows Forms 编写，无第三方运行时依赖，也不需要安装 Python 或 Node.js。
 
 ## 功能
@@ -36,6 +38,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -OutputDirectory
 
 输出为 `dist\轻截图.exe`。也可省略 `-OutputDirectory`，直接输出到项目目录。
 
+构建目录会同时包含 `LICENSE`、`NOTICE` 和 `README.md`，便于分发时保留许可声明。
+
 运行核心逻辑检查：
 
 ```powershell
@@ -61,3 +65,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\test.ps1
 | `build.ps1` | 生成图标并构建可执行文件 |
 | `test.ps1` | 编译并运行检查，清理临时测试程序 |
 | `.github/workflows/build.yml` | Windows 自动构建和检查 |
+
+## 许可证
+
+本项目的软件和随附文档采用 **PolyForm Noncommercial License 1.0.0**，完整条款见 [LICENSE](LICENSE)，版权声明见 [NOTICE](NOTICE)。
+
+- 允许符合许可证条款的非商业使用、修改和分发，例如无预期商业应用的个人学习、实验和兴趣项目。
+- 本许可证不授予商业用途权限，包括以商业目的使用本软件、销售本软件或将其集成到商业产品或收费服务中。
+- 分发全部或部分软件（包括修改版）时，须保留许可证条款或其链接，以及 `NOTICE` 中以 `Required Notice:` 开头的声明。
+
+以上为便于理解的摘要，具体许可范围和条件以 `LICENSE` 全文为准。这是限制商业用途的源码可见项目。

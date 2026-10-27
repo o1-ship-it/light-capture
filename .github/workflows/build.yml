@@ -27,6 +27,10 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: light-capture-windows
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/LICENSE
+            dist/NOTICE
+            dist/README.md
           if-no-files-found: error
           retention-days: 14

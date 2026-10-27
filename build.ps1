@@ -38,4 +38,9 @@ $bitmap.Dispose()
 $appName = -join ([char[]](0x8F7B, 0x622A, 0x56FE))
 & $compiler /nologo /target:winexe /optimize+ /codepage:65001 /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "/win32icon:$iconPath" "/out:$(Join-Path $OutputDirectory ($appName + '.exe'))" (Join-Path $root 'ScreenshotTool.cs')
 if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
+if ($OutputDirectory.TrimEnd('\') -ne $root.TrimEnd('\')) {
+    foreach ($document in @('LICENSE', 'NOTICE', 'README.md')) {
+        Copy-Item -LiteralPath (Join-Path $root $document) -Destination $OutputDirectory -Force
+    }
+}
 Write-Host 'Build completed.'
