@@ -2,7 +2,7 @@
 
 A small Windows screenshot tool with a global hotkey and a configurable save folder.
 
-**源码可见，仅限非商业用途。** 本项目采用 [PolyForm Noncommercial License 1.0.0](LICENSE)。
+**MIT 开源，允许商用。** 本项目采用 [MIT License](LICENSE)。
 
 选好文件夹，按下快捷键，框选后自动保存。用 C# 和 Windows Forms 编写，无第三方运行时依赖，也不需要安装 Python 或 Node.js。
 
@@ -68,10 +68,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\test.ps1
 
 ## 许可证
 
-本项目的软件和随附文档采用 **PolyForm Noncommercial License 1.0.0**，完整条款见 [LICENSE](LICENSE)，版权声明见 [NOTICE](NOTICE)。
+本项目的软件和随附文档采用 **MIT License**，完整条款见 [LICENSE](LICENSE)，版权声明见 [NOTICE](NOTICE)。
 
-- 允许符合许可证条款的非商业使用、修改和分发，例如无预期商业应用的个人学习、实验和兴趣项目。
-- 本许可证不授予商业用途权限，包括以商业目的使用本软件、销售本软件或将其集成到商业产品或收费服务中。
-- 分发全部或部分软件（包括修改版）时，须保留许可证条款或其链接，以及 `NOTICE` 中以 `Required Notice:` 开头的声明。
+- 允许商业使用、复制、修改、合并、分发、再许可和销售软件副本。
+- 分发软件副本或实质性部分时，须保留 `LICENSE` 中的版权声明和许可声明。
+- 软件按现状提供，不作担保；具体免责条款见 `LICENSE`。
 
-以上为便于理解的摘要，具体许可范围和条件以 `LICENSE` 全文为准。这是限制商业用途的源码可见项目。
+以上为便于理解的摘要，具体许可范围和条件以 `LICENSE` 全文为准。
