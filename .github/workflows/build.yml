@@ -1,0 +1,32 @@
+name: Build Windows app
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Build
+        run: .\build.ps1 -OutputDirectory .\dist
+      - name: Test core behavior
+        run: .\test.ps1
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v7
+        with:
+          name: light-capture-windows
+          path: dist/*.exe
+          if-no-files-found: error
+          retention-days: 14

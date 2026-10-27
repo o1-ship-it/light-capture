@@ -1,0 +1,28 @@
+# Generated binaries and build outputs
+*.exe
+*.dll
+*.pdb
+/dist/
+/bin/
+/obj/
+*.zip
+
+# Local settings and credentials
+.env
+.env.*
+!.env.example
+settings.xml
+*.tmp
+*.user
+*.suo
+.vs/
+
+# Captures saved inside this repository
+/截图/
+/Screenshots/
+/截图_*.png
+
+# Operating system files
+Thumbs.db
+Desktop.ini
+.DS_Store
