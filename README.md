@@ -26,6 +26,35 @@ A small Windows screenshot tool with a global hotkey and a configurable save fol
 
 更多操作见 [使用说明](使用说明.md)。
 
+## 给 AI 和脚本调用
+
+构建后的 `LightCapture.Cli.exe` 可以直接读取屏幕像素。它只在收到请求时截图，不模拟鼠标或键盘操作，也不切换窗口。
+
+### 命令行
+
+在项目目录执行以下命令，截取主屏并生成 PNG。输出文件夹须已存在。为避免误覆盖，指定的文件名须未被使用。
+
+```powershell
+.\dist\LightCapture.Cli.exe capture --output .\capture.png
+```
+
+追加 `--region 100 80 640 480` 可指定区域。四个参数依次为左上角的 X、Y 坐标、宽度、高度，单位为物理像素。主屏左上角为 `(0, 0)`，其他显示器可使用负坐标。区域须完全位于同一个显示器内。
+
+在本机 Codex 任务中可以这样说：“需要看屏幕时，调用 LightCapture.Cli.exe 截图并读取生成的 PNG。软件操作走软件接口，不要调用 Using my computer。”
+
+### Codex 本地 MCP
+
+有 Codex CLI 时，在项目目录运行以下命令注册工具，然后开启新的本机 Codex 会话。
+
+```powershell
+$captureExe = (Resolve-Path -LiteralPath .\dist\LightCapture.Cli.exe).Path
+codex mcp add light_capture -- "$captureExe" mcp
+```
+
+该接口仅公开 `capture_screen`。它经本地标准输入输出返回一张 PNG，不保存截图、不监听网络端口。调用时可不传参数以截取主屏，也可以传入 `{"region":{"x":100,"y":80,"width":640,"height":480}}`。图片会提供给发起请求的客户端。如需每次确认，可在 Codex 的 MCP 配置中把该工具的 `approval_mode` 设为 `"prompt"`。
+
+这两种方式都需要在有交互桌面的同一台 Windows 电脑运行。ChatGPT 网页的自定义 MCP 插件使用远程地址或安全隧道，不能直接启动这个本地命令。 [OpenAI Docs](https://developers.openai.com/api/docs/guides/custom-mcp-server)
+
 ## 从源码构建
 
 目标平台为 Windows 10 / 11，需 .NET Framework 4.x。构建使用系统 .NET Framework 自带的 C# 编译器和 Windows PowerShell，不需要额外安装 .NET SDK 或下载 NuGet 包。
@@ -36,7 +65,7 @@ A small Windows screenshot tool with a global hotkey and a configurable save fol
 powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -OutputDirectory .\dist
 ```
 
-输出为 `dist\轻截图.exe`。也可省略 `-OutputDirectory`，直接输出到项目目录。
+输出为 `dist\轻截图.exe` 和 `dist\LightCapture.Cli.exe`。也可省略 `-OutputDirectory`，直接输出到项目目录。
 
 构建目录会同时包含 `LICENSE`、`NOTICE` 和 `README.md`，便于分发时保留许可声明。
 
@@ -61,6 +90,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\test.ps1
 | 文件 | 用途 |
 | --- | --- |
 | `ScreenshotTool.cs` | 窗口、快捷键、框选与图片保存 |
+| `CaptureCli.cs` | 命令行截图与本地 MCP 接口 |
 | `Tests.cs` | 核心逻辑检查 |
 | `build.ps1` | 生成图标并构建可执行文件 |
 | `test.ps1` | 编译并运行检查，清理临时测试程序 |

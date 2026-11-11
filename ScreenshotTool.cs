@@ -15,8 +15,7 @@ namespace QuickCapture
         [STAThread]
         private static void Main()
         {
-            try { Native.SetProcessDpiAwareness(2); }
-            catch { Native.SetProcessDPIAware(); }
+            Native.EnableDpiAwareness();
             bool first;
             using (var mutex = new Mutex(true, "Local\\QuickCapture.Tool.v1", out first))
             {
@@ -34,6 +33,13 @@ namespace QuickCapture
 
     internal static class Native
     {
+        internal static void EnableDpiAwareness()
+        {
+            try { SetProcessDpiAwareness(2); }
+            catch (DllNotFoundException) { SetProcessDPIAware(); }
+            catch (EntryPointNotFoundException) { SetProcessDPIAware(); }
+        }
+
         [DllImport("user32.dll")] internal static extern bool SetProcessDPIAware();
         [DllImport("shcore.dll")] internal static extern int SetProcessDpiAwareness(int awareness);
         [DllImport("user32.dll", SetLastError = true)] internal static extern bool RegisterHotKey(IntPtr window, int id, uint modifiers, uint key);
@@ -99,6 +105,25 @@ namespace QuickCapture
             if ((modifiers & 1) != 0) result += "Alt + ";
             if ((modifiers & 4) != 0) result += "Shift + ";
             return result + ((key >= Keys.D0 && key <= Keys.D9) ? ((int)key - (int)Keys.D0).ToString() : key.ToString());
+        }
+    }
+
+    internal static class ScreenCapture
+    {
+        internal static Bitmap Take(Rectangle bounds)
+        {
+            var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
+            try
+            {
+                using (Graphics graphics = Graphics.FromImage(bitmap))
+                    graphics.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size, CopyPixelOperation.SourceCopy);
+                return bitmap;
+            }
+            catch
+            {
+                bitmap.Dispose();
+                throw;
+            }
         }
     }
 
@@ -379,9 +404,7 @@ namespace QuickCapture
             try
             {
                 Rectangle bounds = SystemInformation.VirtualScreen;
-                desktop = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
-                using (Graphics graphics = Graphics.FromImage(desktop))
-                    graphics.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size, CopyPixelOperation.SourceCopy);
+                desktop = ScreenCapture.Take(bounds);
                 if (settings.FullScreen) SaveCapture(desktop);
                 else
                 {
